@@ -1,3 +1,9 @@
+data/*
+outputs/*
+mah_logs/*
+feats_logs/*
+
+
 ##
 ## Python Section - See https://github.com/github/gitignore/blob/master/Python.gitignore
 ##
