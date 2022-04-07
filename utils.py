@@ -20,3 +20,12 @@ def get_n_layer_hidden_embeddings(hidden_states, layer_n=12):
     _hs = torch.concat(_hs, dim=1)
     
     return torch.concat([_start, _hs], dim=1).squeeze(dim=0)
+
+
+def filter_token_length(sequences, tokenizer, tok_len=19):
+    filtered_sequences = []
+    for seq in sequences:
+        seq_ids = tokenizer.encode(seq, return_tensors='pt')
+        if len(seq_ids[0]) < 20:
+            filtered_sequences.append(seq)
+    return filtered_sequences
