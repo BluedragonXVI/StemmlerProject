@@ -182,5 +182,5 @@ def oc_svm_detector(ecode, ecode_trn_seq, ecode_gen_seq, trn_frac, percent_print
             #print_seq_dsc(ecode_gen_seq[ecode_anomaly[i][0]])
             #print()
     
-    return pd.DataFrame(rows), d
+    return pd.DataFrame(rows), d, ecode_det, ecode_trn_mdf, ecode_tst_mdf, ecode_ood_mdf
     
