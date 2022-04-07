@@ -45,6 +45,9 @@ def oc_svm_train(trn_mdf, test_mdf, ood_mdf, label):
     ood_labels = np.ones(shape=(ood_mdf.shape[0], ))
     test_labels = np.zeros(shape=(test_mdf.shape[0], ))
 
+    print(test_mdf.shape)
+    print(ood_mdf.shape)
+    
     np.random.shuffle(test_mdf)
     np.random.shuffle(ood_mdf)
     best_ours_results = None
@@ -120,7 +123,7 @@ def oc_svm_detector(ecode, ecode_trn_seq, ecode_gen_seq, trn_frac, percent_print
     ecode_trn_end_token_mean, ecode_trn_end_token_inv_cov = get_empirical_mean_cov(cov_estimator, ecode_trn_end_token_layer_embeddings)
     ecode_trn_mdf = get_mdf(torch.Tensor(ecode_trn_end_token_layer_embeddings), ecode_trn_end_token_mean, ecode_trn_end_token_inv_cov)
     ecode_tst_mdf = get_mdf(torch.Tensor(ecode_tst_end_token_layer_embeddings), ecode_trn_end_token_mean, ecode_trn_end_token_inv_cov)
-    ecode_ood_mdf = get_mdf(torch.Tensor(ecode_gen_end_token_layer_embeddings), ecode_trn_end_token_mean, ecode_trn_end_token_inv_cov)
+    ecode_ood_mdf = get_mdf(torch.Tensor(ecode_ood_end_token_layer_embeddings), ecode_trn_end_token_mean, ecode_trn_end_token_inv_cov)
     
     # Train the OC SVM
     ecode_score, ecode_results, ecode_det = oc_svm_train(ecode_trn_mdf, ecode_tst_mdf, ecode_ood_mdf, ecode)
@@ -128,7 +131,7 @@ def oc_svm_detector(ecode, ecode_trn_seq, ecode_gen_seq, trn_frac, percent_print
     ecode_score_df = pd.DataFrame(ecode_score)
     
     # Get the range and delineator (75% quantile)
-    rng, d = plot_scores(ecode_score_df)
+    rng, d = plot_scores(ecode_score_df, ecode_det)
     
     ecode_score_samples = ecode_det.score_samples(ecode_ood_mdf)
     

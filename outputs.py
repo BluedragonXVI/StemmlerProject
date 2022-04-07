@@ -7,16 +7,18 @@ from icd9cms.icd9 import search
 with open("../data/pcode_dict.txt", "rb") as fp: 
     icd9_pcode_dict = pickle.load(fp)
 
-def plot_scores(score_df, bins=100, ft='X_scores'):
+def plot_scores(score_df, model, bins=100, ft='X_scores'):
     
     #rng = [score_df[ft].min(), score_df[ft].mean() + 2*score_df[ft].std()]
     rng = [score_df[ft].quantile(0.05), score_df[ft].quantile(0.95)]
     
     y = score_df[score_df['Y_test']==1][ft]
     d = y.quantile(0.75)
+    #d = model.offset_[0]
     
     plt.hist(score_df[score_df['Y_test']==1][ft], bins=bins, range=rng, alpha=0.7, label='Out of Distribution')
     plt.hist(score_df[score_df['Y_test']==0][ft], bins=bins, range=rng, alpha=0.7, label='In-Distribution')
+    #plt.axvline(x=d, color='k', linestyle='--')
     plt.axvline(x=d, color='k', linestyle='--')
     plt.legend(loc='upper right')
     plt.show()
